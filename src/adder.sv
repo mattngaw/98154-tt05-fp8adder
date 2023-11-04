@@ -1,6 +1,11 @@
 `timescale 1ns/1ps
 `default_nettype none
 
+/*--- FP8 E5M2 ---*/
+parameter FP8_E5M2_WIDTH        = 8;
+parameter FP8_E5M2_EXP_WIDTH    = 5;
+parameter FP8_E5M2_MAN_WIDTH    = 2;
+
 typedef enum logic [1:0] {
     ROUND_UPWARD,
     ROUND_DOWNWARD,
