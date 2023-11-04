@@ -5,7 +5,7 @@
  * Rounding Modes
  *---------------------------------------------------------------------------*/
 
-typedef enum {
+typedef enum logic [2:0] {
     ROUND_UPWARD,
     ROUND_DOWNWARD,
     ROUND_ZERO,
