@@ -6,13 +6,6 @@ parameter FP8_E5M2_WIDTH        = 8;
 parameter FP8_E5M2_EXP_WIDTH    = 5;
 parameter FP8_E5M2_MAN_WIDTH    = 2;
 
-typedef enum logic [1:0] {
-    ROUND_UPWARD,
-    ROUND_DOWNWARD,
-    ROUND_ZERO,
-    ROUND_NEAREST
-} rounding_mode_t;
-
 /**
  * Unpack and subtract exponents
  **/
@@ -191,8 +184,7 @@ endmodule: fp_add_stage_3
  * Round and normalize 2
  */
 module fp_add_stage_4
-    #(parameter rounding_mode_t ROUNDING    = ROUND_NEAREST,
-      parameter WIDTH       = FP8_E5M2_WIDTH,
+    #(parameter WIDTH       = FP8_E5M2_WIDTH,
       parameter EXP_WIDTH   = FP8_E5M2_EXP_WIDTH, 
       parameter MAN_WIDTH   = FP8_E5M2_MAN_WIDTH)
     (input logic [MAN_WIDTH+4:0]    man_sum_in,
@@ -216,28 +208,16 @@ module fp_add_stage_4
     assign r = man_sum_in[1];
     assign s = man_sum_in[0];
 
-    // Rounding logic
-    if (ROUNDING == ROUND_NEAREST) begin
-        logic under_half, to_even;
+    logic under_half, to_even;
 
-        assign under_half = !g;
-        assign to_even = !ulp && !r && !s;
+    assign under_half = !g;
+    assign to_even = !ulp && !r && !s;
 
-        always_comb begin
-            if (under_half || to_even) man_rounded = man_sum;
-            else man_rounded = man_sum + 'd1;
-        end
+    always_comb begin
+        if (under_half || to_even) man_rounded = man_sum;
+        else man_rounded = man_sum + 'd1;
     end
-    else if (ROUNDING == ROUND_UPWARD) begin
-        assign man_rounded = ((g || r || s) ^ sign_in) ? man_sum +'d1 : man_sum;
-    end
-    else if (ROUNDING == ROUND_DOWNWARD) begin
-        assign man_rounded = ((g || r || s) ^ sign_in) ? man_sum : man_sum + 'd1;
-    end
-    else if (ROUNDING == ROUND_ZERO) begin
-        assign man_rounded = man_sum;
-    end
-
+    
     assign carry = man_rounded[MAN_WIDTH+1];
 
     // Postshift 2 if rounding up put man_out within [2, 4)
@@ -276,8 +256,7 @@ module fp_add_stage_5
 endmodule: fp_add_stage_5
 
 module fp_add
-    #(parameter rounding_mode_t ROUNDING    = ROUND_NEAREST,
-      parameter WIDTH       = FP8_E5M2_WIDTH,
+    #(parameter WIDTH       = FP8_E5M2_WIDTH,
       parameter EXP_WIDTH   = FP8_E5M2_EXP_WIDTH, 
       parameter MAN_WIDTH   = FP8_E5M2_MAN_WIDTH)
     (input logic [WIDTH-1:0]        a, b,
@@ -374,7 +353,7 @@ module fp_add
     end
     */
 
-    fp_add_stage_4 #(ROUNDING, WIDTH, EXP_WIDTH, MAN_WIDTH) stage4 (
+    fp_add_stage_4 #(WIDTH, EXP_WIDTH, MAN_WIDTH) stage4 (
         .man_sum_in(man_sum_3),
         .exp_norm1_in(exp_norm1_3),
         .sign_in(sign_3),
