@@ -13,6 +13,7 @@ module tt_um_mattngaw_fp8 (
 
     // Use bidirectionals as inputs 
     assign uio_oe = 8'b00000000;
+    assign uio_out = 8'b00000000;
 
     fp_add #(.WIDTH(8), .EXP_WIDTH(5), .MAN_WIDTH(2)) adder (ui_in, uio_in, 1'b0, uo_out);
 
