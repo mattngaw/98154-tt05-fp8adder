@@ -3,13 +3,6 @@
 `timescale 1ns/1ps
 `default_nettype none
 
-typedef enum {
-    ROUND_UPWARD,
-    ROUND_DOWNWARD,
-    ROUND_ZERO,
-    ROUND_NEAREST
-} rounding_mode_t;
-
 /**
  * Unpack and subtract exponents
  **/
