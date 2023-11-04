@@ -181,7 +181,7 @@ endmodule: fp_add_stage_3
  * Round and normalize 2
  */
 module fp_add_stage_4
-    #(parameter ROUNDING    = ROUND_NEAREST,
+    #(parameter rounding_mode_t ROUNDING    = ROUND_NEAREST,
       parameter WIDTH       = FP8_E5M2_WIDTH,
       parameter EXP_WIDTH   = FP8_E5M2_EXP_WIDTH, 
       parameter MAN_WIDTH   = FP8_E5M2_MAN_WIDTH)
@@ -266,7 +266,7 @@ module fp_add_stage_5
 endmodule: fp_add_stage_5
 
 module fp_add
-    #(parameter ROUNDING    = ROUND_NEAREST,
+    #(parameter rounding_mode_t ROUNDING    = ROUND_NEAREST,
       parameter WIDTH       = FP8_E5M2_WIDTH,
       parameter EXP_WIDTH   = FP8_E5M2_EXP_WIDTH, 
       parameter MAN_WIDTH   = FP8_E5M2_MAN_WIDTH)
